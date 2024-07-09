@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select your feelings"
+            android:textSize="18sp"
+            android:layout_gravity="center"
+            android:paddingBottom="16dp"/>
+
+        <!-- Feeling sad or Tearful -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Feeling sad or Tearful" />
+        <Spinner
+            android:id="@+id/spinner_feeling_sad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/feeling_sad_options" />
+
+        <!-- Irritable towards baby & partner -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Irritable towards baby_partner" />
+        <Spinner
+            android:id="@+id/spinner_irritable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/irritable_options" />
+
+        <!-- Trouble sleeping at night -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trouble sleeping at night" />
+        <Spinner
+            android:id="@+id/spinner_sleep_trouble"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/sleep_trouble_options" />
+
+        <!-- Problems concentrating or making decision -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Problems concentrating or making decision" />
+        <Spinner
+            android:id="@+id/spinner_concentration_problems"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/concentration_problems_options" />
+
+        <!-- Overeating or loss of appetite -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Overeating or loss of appetite" />
+        <Spinner
+            android:id="@+id/spinner_eating_issues"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/eating_issues_options" />
+
+        <!-- Feeling anxious -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Feeling anxious" />
+        <Spinner
+            android:id="@+id/spinner_anxious"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/anxious_options" />
+
+        <!-- Feeling of guilt -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Feeling of guilt" />
+        <Spinner
+            android:id="@+id/spinner_guilt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/guilt_options" />
+
+        <!-- Problems of bonding with baby -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Problems of bonding with baby" />
+        <Spinner
+            android:id="@+id/spinner_bonding_problems"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/bonding_problems_options" />
+
+        <Button
+            android:id="@+id/button_navigate_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Register"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"/>
+
+    </LinearLayout>
+</ScrollView>

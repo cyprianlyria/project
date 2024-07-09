@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textViewLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Activities"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_gravity="center"
+        android:layout_marginBottom="24dp" />
+
+    <ProgressBar
+        android:id="@+id/PBprogress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/btnModel"
+        android:layout_width="match_parent"
+        android:layout_height="67dp"
+        android:layout_marginBottom="35dp"
+        android:text="Postnatal depression status" />
+
+    <Button
+        android:id="@+id/btnChat"
+        android:layout_width="match_parent"
+        android:layout_height="67dp"
+        android:layout_marginBottom="35dp"
+        android:text="Chat" />
+    <Button
+        android:id="@+id/btnAppointment"
+        android:layout_width="match_parent"
+        android:layout_height="67dp"
+        android:layout_marginBottom="35dp"
+        android:text="Book Appointment" />
+    <Button
+        android:id="@+id/btnPayment"
+        android:layout_width="match_parent"
+        android:layout_height="67dp"
+        android:layout_marginBottom="35dp"
+        android:text="make payment" />
+
+</LinearLayout>

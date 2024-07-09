@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/editTextAge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter your age"
+        android:inputType="number"
+        android:layout_margin="4dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/feeling_sad_prompt"
+        android:layout_marginBottom="5dp"/>
+
+    <Spinner
+        android:id="@+id/spinnerFeelingSad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/spinner_background"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/irritable_prompt" />
+
+    <Spinner
+        android:id="@+id/spinnerIrritable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/spinner_background"
+        android:layout_marginBottom="5dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/sleep_trouble_prompt" />
+
+    <Spinner
+        android:id="@+id/spinnerSleepTrouble"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/spinner_background"
+        android:layout_marginBottom="5dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/concentration_problems_prompt" />
+
+    <Spinner
+        android:id="@+id/spinnerConcentrationProblems"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/spinner_background"
+        android:layout_marginBottom="5dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/eating_issues_prompt" />
+
+    <Spinner
+        android:id="@+id/spinnerEatingIssues"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/spinner_background"
+        android:layout_marginBottom="5dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/anxious_prompt" />
+
+    <Spinner
+        android:id="@+id/spinnerAnxious"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/spinner_background"
+        android:layout_marginBottom="5dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/guilt_prompt" />
+
+    <Spinner
+        android:id="@+id/spinnerGuilt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/spinner_background"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/bonding_problems_prompt" />
+
+    <Spinner
+        android:id="@+id/spinnerBondingProblems"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/spinner_background"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_navigate_model"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Run Model" />
+
+    <Button
+        android:id="@+id/button_navigate_chat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Navigate to Appointment" />
+
+</LinearLayout>
