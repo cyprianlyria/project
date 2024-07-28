@@ -1,13 +1,8 @@
 <resources>
     <string name="app_name">Project</string>
+
     <!-- Strings used for fragments for navigation -->
-    <!--    <string name="first_fragment_label">First Fragment</string>-->
-    <!--    <string name="second_fragment_label">Second Fragment</string>-->
-    <!--    <string name="next">Next</string>-->
-    <!--    <string name="previous">Previous</string>-->
-
     <string name="select_prompt">Select</string>
-
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -27,13 +22,12 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="county_residence_hint">Choose your county of residence</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
+    <!-- Add this line in your strings.xml -->
+    <string name="suicide_attempt_prompt">Suicide Attempt Prompt</string>
+
+    <!-- Strings for model prompts -->
     <string-array name="feeling_sad_options">
         <item>No</item>
         <item>Yes</item>
@@ -66,7 +60,15 @@
         <item>No</item>
         <item>Yes</item>
     </string-array>
-
+    <string-array name="suicide_attempt_options">
+        <item>No</item>
+        <item>Yes</item>
+    </string-array>
+    <string name="age_hint">Enter your age</string>
+    <string name="button_navigate_model">Navigate Model</string>
+    <string name="button_navigate_chat">Navigate Chat</string>
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
@@ -81,9 +83,6 @@
         molestie nibh. Phasellus at commodo eros, non aliquet metus. Sed maximus nisl nec dolor
         bibendum, vel congue leo egestas.\n\n
         Sed interdum tortor nibh, in sagittis risus mollis quis. Curabitur mi odio, condimentum sit
-    <string name="previous">Previous</string>
-
-
         amet auctor at, mollis non turpis. Nullam pretium libero vestibulum, finibus orci vel,
         molestie quam. Fusce blandit tincidunt nulla, quis sollicitudin libero facilisis et. Integer
         interdum nunc ligula, et fermentum metus hendrerit id. Vestibulum lectus felis, dictum at
@@ -106,4 +105,6 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
 </resources>

@@ -9,7 +9,7 @@
         android:id="@+id/editTextAge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter your age"
+        android:hint="@string/age_hint"
         android:inputType="number"
         android:layout_margin="4dp"/>
 
@@ -24,8 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
-        android:background="@drawable/spinner_background"
-        />
+        android:background="@drawable/spinner_background"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -110,16 +109,27 @@
         android:layout_height="wrap_content"
         android:background="@drawable/spinner_background"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/suicide_attempt_prompt" />
+
+    <Spinner
+        android:id="@+id/spinnerSuicideAttempt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/spinner_background"/>
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_navigate_model"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Run Model" />
+        android:text="@string/button_navigate_model" />
 
     <Button
         android:id="@+id/button_navigate_chat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Navigate to Appointment" />
+        android:text="@string/button_navigate_chat" />
 
 </LinearLayout>

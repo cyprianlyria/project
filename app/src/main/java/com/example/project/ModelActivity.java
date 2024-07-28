@@ -15,14 +15,15 @@ import org.tensorflow.lite.DataType;
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 
 public class ModelActivity extends AppCompatActivity {
     private EditText editTextAge;
     private Spinner spinnerFeelingSad, spinnerIrritable, spinnerSleepTrouble,
-            spinnerConcentrationProblems, spinnerEatingIssues,
-            spinnerAnxious, spinnerGuilt, spinnerBondingProblems;
-    private Button buttonNavigateModel, buttonNavigateChat;
+            spinnerConcentrationProblems, spinnerEatingIssues, spinnerAnxious,
+            spinnerGuilt, spinnerBondingProblems, spinnerSuicidal;
+    private Button buttonNavigateModel;
+
+    private int consecutiveModeratelyDepressed = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +45,9 @@ public class ModelActivity extends AppCompatActivity {
         spinnerAnxious = findViewById(R.id.spinnerAnxious);
         spinnerGuilt = findViewById(R.id.spinnerGuilt);
         spinnerBondingProblems = findViewById(R.id.spinnerBondingProblems);
+        spinnerSuicidal = findViewById(R.id.spinnerSuicideAttempt);
 
         buttonNavigateModel = findViewById(R.id.button_navigate_model);
-        buttonNavigateChat = findViewById(R.id.button_navigate_chat);
     }
 
     private void setupSpinners() {
@@ -58,10 +59,10 @@ public class ModelActivity extends AppCompatActivity {
         setupSpinner(spinnerAnxious, R.array.anxious_options);
         setupSpinner(spinnerGuilt, R.array.guilt_options);
         setupSpinner(spinnerBondingProblems, R.array.bonding_problems_options);
+        setupSpinner(spinnerSuicidal, R.array.suicide_attempt_options);
     }
 
     private void setButtonClickListeners() {
-        buttonNavigateChat.setOnClickListener(v -> navigateToChat());
         buttonNavigateModel.setOnClickListener(v -> handleSpinnerSelections());
     }
 
@@ -75,10 +76,11 @@ public class ModelActivity extends AppCompatActivity {
         inputValues[5] = getSelectedSpinnerValue(spinnerAnxious);
         inputValues[6] = getSelectedSpinnerValue(spinnerGuilt);
         inputValues[7] = getSelectedSpinnerValue(spinnerBondingProblems);
+        inputValues[8] = getSelectedSpinnerValue(spinnerSuicidal);
 
         String ageInput = editTextAge.getText().toString();
         if (!ageInput.isEmpty()) {
-            inputValues[8] = Float.parseFloat(ageInput);
+            inputValues[9] = Float.parseFloat(ageInput);
         } else {
             Toast.makeText(this, "Please enter your age", Toast.LENGTH_SHORT).show();
             return;
@@ -88,7 +90,7 @@ public class ModelActivity extends AppCompatActivity {
             Model model = Model.newInstance(getApplicationContext());
 
             // Creates inputs for reference.
-            TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 9}, DataType.FLOAT32);
+            TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 10}, DataType.FLOAT32);
             inputFeature0.loadArray(inputValues);
 
             // Runs model inference and gets result.
@@ -116,18 +118,33 @@ public class ModelActivity extends AppCompatActivity {
             results.append("Output ").append(i).append(": ").append(outputValues[i]).append("\n");
         }
 
-        String depressionStatus = getDepressionStatus(outputValues[0]);
+        float outputValue = outputValues[0];
+        String depressionStatus = getDepressionStatus(outputValue);
         results.append("\nDepression Status: ").append(depressionStatus);
 
-        Toast.makeText(this, results.toString(), Toast.LENGTH_LONG).show();
+        if (outputValue == 2) {
+            consecutiveModeratelyDepressed++;
+        } else if (outputValue == 1 && consecutiveModeratelyDepressed >= 2) {
+            consecutiveModeratelyDepressed = 0; // Reset counter after showing toast
+            Toast.makeText(this, "Depression status has improved to Not Depressed", Toast.LENGTH_LONG).show();
+        } else {
+            consecutiveModeratelyDepressed = 0; // Reset counter if output is not 2 or 1
+        }
+
+        Toast.makeText(this, depressionStatus, Toast.LENGTH_LONG).show();
     }
 
     private String getDepressionStatus(float outputValue) {
-        return outputValue > 0.5 ? "Depressed" : "Not Depressed";
-    }
-
-    private void navigateToChat() {
-        // Implement navigation to chat activity
+        switch ((int) outputValue) {
+            case 0:
+                return "Depressed";
+            case 1:
+                return "Not Depressed";
+            case 2:
+                return "Moderately Depressed";
+            default:
+                return "Unknown";
+        }
     }
 
     private void setupSpinner(Spinner spinner, int arrayResId) {

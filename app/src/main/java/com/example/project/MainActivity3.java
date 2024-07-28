@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity2 extends AppCompatActivity {
+public class MainActivity3 extends AppCompatActivity {
 
     private TextView textViewLogin;
     private ProgressBar progressBar;
@@ -31,7 +31,7 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
-                Intent intent = new Intent(MainActivity2.this, ModelActivity.class);
+                Intent intent = new Intent(MainActivity3.this,DisplayUsers.class);
                 startActivity(intent);
                 progressBar.setVisibility(View.GONE);
             }
@@ -41,7 +41,7 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
-                Intent intent = new Intent(MainActivity2.this,DisplayUsers.class);
+                Intent intent = new Intent(MainActivity3.this,DisplayUsers.class);
                 startActivity(intent);
                 progressBar.setVisibility(View.GONE);
             }
@@ -51,7 +51,7 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
-                Intent intent = new Intent(MainActivity2.this, PatientAppointmentActivity.class);
+                Intent intent = new Intent(MainActivity3.this, DoctorAppointmentActivity.class);
                 startActivity(intent);
                 progressBar.setVisibility(View.GONE);
             }
@@ -60,10 +60,8 @@ public class MainActivity2 extends AppCompatActivity {
         btnPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                Intent intent = new Intent(MainActivity2.this, PaymentActivity.class);
-                startActivity(intent);
-                progressBar.setVisibility(View.GONE);            }
+                // Implement the action for payment
+            }
         });
     }
 }

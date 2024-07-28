@@ -20,7 +20,7 @@ public class Register extends AppCompatActivity {
 
     EditText editName, editPassword, editEmail;
     TextView tvBackToLogin;
-    Button btnRegister;
+    Button btnRegister, btnRegisterClinician; // Added button for clinician registration
 
     private FirebaseAuth mAuth;
     DatabaseReference databaseReference;
@@ -35,6 +35,7 @@ public class Register extends AppCompatActivity {
         editName = findViewById(R.id.editTextRegName);
         tvBackToLogin = findViewById(R.id.tvBackToLogin);
         btnRegister = findViewById(R.id.btnRegister);
+        btnRegisterClinician = findViewById(R.id.btnSignUp); // Initialize the new button
 
         mAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference("userDetails");
@@ -46,13 +47,18 @@ public class Register extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), login.class);
             startActivity(intent);
         });
+
+        btnRegisterClinician.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), RegisterClinician.class);
+            startActivity(intent);
+        });
     }
 
     public void register() {
         String name = editName.getText().toString().trim();
         String email = editEmail.getText().toString().trim();
         String password = editPassword.getText().toString().trim();
-        String category="patient";
+        String category = "patient"; // Assuming default category is "patient"
 
         if (name.isEmpty()) {
             editName.setError("Enter a valid name");

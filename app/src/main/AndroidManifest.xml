@@ -13,11 +13,37 @@
         android:theme="@style/Theme.Project"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity2"
+            android:name=".PaymentActivity"
             android:exported="false"
             android:theme="@style/Theme.Project" />
         <activity
-            android:name=".appointmentActivity"
+            android:name=".MainActivity3"
+            android:exported="true"
+            android:theme="@style/Theme.Project" />
+        <activity
+            android:name=".MainActivity2"
+            android:exported="true"
+            android:theme="@style/Theme.Project">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".PatientAppointmentActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Project">
+
+        </activity>
+        <activity
+            android:name=".DoctorAppointmentActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Project">
+
+        </activity>
+        <activity
+            android:name=".ViewAppointmentActivity"
             android:exported="true"
             android:theme="@style/Theme.Project">
 
@@ -34,8 +60,8 @@
             android:name=".ModelActivity"
             android:exported="false"
             android:theme="@style/Theme.Project">
-        </activity>
 
+        </activity>
         <activity
             android:name=".AdminPanelActivity"
             android:exported="false"
@@ -50,11 +76,7 @@
             android:name=".Register"
             android:exported="true"
             android:theme="@style/Theme.Project">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".ChatActivity"

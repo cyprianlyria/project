@@ -28,13 +28,13 @@ public class RegisterClinician extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_register_clinician);
 
-        editEmail = findViewById(R.id.editTextRegEmail);
-        editPassword = findViewById(R.id.editTextRegPassword);
-        editName = findViewById(R.id.editTextRegName);
-        tvBackToLogin = findViewById(R.id.tvBackToLogin);
-        btnRegister = findViewById(R.id.btnRegister);
+        editEmail = findViewById(R.id.editEmail);
+        editPassword = findViewById(R.id.editPassword);
+        editName = findViewById(R.id.editUsername);
+        tvBackToLogin = findViewById(R.id.TVback);
+        btnRegister = findViewById(R.id.btnSignUp);
 
         mAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference("userDetails");
@@ -52,7 +52,7 @@ public class RegisterClinician extends AppCompatActivity {
         String name = editName.getText().toString().trim();
         String email = editEmail.getText().toString().trim();
         String password = editPassword.getText().toString().trim();
-        String category="clinician";
+        String category = "clinician";
 
         if (name.isEmpty()) {
             editName.setError("Enter a valid name");
@@ -73,24 +73,20 @@ public class RegisterClinician extends AppCompatActivity {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnSuccessListener(authResult -> {
                     // User registered successfully
-                    // Save user data to the database
                     String userId = mAuth.getCurrentUser().getUid();
                     DatabaseReference userRef = databaseReference.child(userId);
                     UserDetails user = new UserDetails(name, email, category);
                     userRef.setValue(user)
                             .addOnSuccessListener(aVoid -> {
-                                // Data saved successfully
                                 Toast.makeText(RegisterClinician.this, "User registered and data saved successfully", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(RegisterClinician.this, login.class));
                                 finish();
                             })
                             .addOnFailureListener(e -> {
-                                // Error saving data
                                 Toast.makeText(RegisterClinician.this, "Failed to save user data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                             });
                 })
                 .addOnFailureListener(e -> {
-                    // Error registering user
                     Toast.makeText(RegisterClinician.this, "Failed to register user: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
