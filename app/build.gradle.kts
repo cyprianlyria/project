@@ -1,6 +1,9 @@
+import com.android.build.api.variant.BuildConfigField
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
+
 }
 
 android {
@@ -15,6 +18,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        BuildConfigField("string", "CONSUMER_KEY","\"0cyJrfzGx9zQ6vZgd1GpaP0wUcAAbmGH6JgYXtHNZikkGhr\"")
+        BuildConfigField("string", "CONSUMER_SECRET","\"fjwBlkAWn6IOGdAyGmnmOqPnQFYpIx1se8EA5RKXrTlGnnIFOBvZiV4EEAWN9lco\"")
+
     }
 
     buildTypes {

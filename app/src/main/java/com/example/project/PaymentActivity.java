@@ -1,144 +1,141 @@
 package com.example.project;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import com.example.project.model.AccessToken;
+import com.example.project.model.STKPush;
+import com.example.project.databinding.ActivityPaymentBinding;
 
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
-public class PaymentActivity extends AppCompatActivity {
+public class PaymentActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String BASE_URL = "https://sandbox.safaricom.co.ke/";
-    private static final String AUTHORIZATION_TOKEN = "Bearer QGFA8pmyFHYX6kq306YR4FVowvST";
-    private static final String CALLBACK_URL = "https://mydomain.com/path";
-    private MpesaApi mpesaApi;
+    private static final String TAG = "PaymentActivity";
+    private DarajaApiClient mApiClient;
+    private ProgressDialog mProgressDialog;
+    private ActivityPaymentBinding binding;
+
+    // Constants (should be stored securely in a production app)
+    private static final String BUSINESS_SHORT_CODE = "174379";
+    private static final String PASSKEY = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919";
+    private static final String CALLBACK_URL = "https://your-actual-callback-url.com/path";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_payment);
+        binding = ActivityPaymentBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        EditText editTextPhoneNumber = findViewById(R.id.editTextPhoneNumber);
-        Button buttonPay = findViewById(R.id.buttonPay);
+        mProgressDialog = new ProgressDialog(this);
+        mApiClient = new DarajaApiClient();
+        mApiClient.setIsDebug(true); // Set True to enable logging, false to disable.
 
-        try {
-            setupMpesaApi();
-        } catch (Exception e) {
-            Log.e("PaymentActivity", "Error setting up Mpesa API", e);
-            Toast.makeText(this, "Error setting up payment service", Toast.LENGTH_SHORT).show();
-        }
+        binding.btnPay.setOnClickListener(this);
 
-        buttonPay.setOnClickListener(new View.OnClickListener() {
+        getAccessToken();
+    }
+
+    public void getAccessToken() {
+        mApiClient.setGetAccessToken(true);
+        mApiClient.mpesaService().getAccessToken().enqueue(new Callback<AccessToken>() {
             @Override
-            public void onClick(View v) {
-                    String phoneNumber = editTextPhoneNumber.getText().toString().trim();
+            public void onResponse(@NonNull Call<AccessToken> call, @NonNull Response<AccessToken> response) {
+                if (response.isSuccessful()) {
+                    mApiClient.setAuthToken(response.body().accessToken);
+                }
+            }
 
-
-
-
+            @Override
+            public void onFailure(@NonNull Call<AccessToken> call, @NonNull Throwable t) {
+                Log.e(TAG, "Failed to get access token: " + t.getMessage());
+                Toast.makeText(PaymentActivity.this, "Failed to get access token", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void setupMpesaApi() throws Exception {
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(logging)
-                .build();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        mpesaApi = retrofit.create(MpesaApi.class);
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.btnPay) {
+            String phoneNumber = binding.etPhone.getText().toString();
+            String amount = binding.etAmount.getText().toString();
+            if (phoneNumber.isEmpty() || amount.isEmpty()) {
+                Toast.makeText(this, "Please enter both phone number and amount", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            performSTKPush(phoneNumber, amount);
+        }
     }
 
-    private void makePayment(String phoneNumber) throws Exception {
-        try {
-            String businessShortCode = "174379";
-            String passkey = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919";
-            String timestamp = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(new Date());
+    public void performSTKPush(String phoneNumber, String amount) {
+        mProgressDialog.setMessage("Processing your request");
+        mProgressDialog.setTitle("Please Wait...");
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.show();
 
-            // Generate the password
-            String password = generatePassword(businessShortCode, passkey, timestamp);
+        String timestamp = Utils.getTimestamp();
+        String toEncode = BUSINESS_SHORT_CODE + PASSKEY + timestamp;
 
-            // Ensure the phone number is in the correct format
-            String formattedPhoneNumber = formatPhoneNumber(phoneNumber);
+        byte[] byteArray = toEncode.getBytes(StandardCharsets.UTF_8);
 
-            STKPushRequest request = new STKPushRequest(
-                    businessShortCode,
-                    password,
-                    timestamp,
-                    "CustomerPayBillOnline",
-                    "1", // Amount
-                    formattedPhoneNumber,
-                    businessShortCode,
-                    CALLBACK_URL,
-                    "CompanyXLTD",
-                    "Payment of X"
-            );
+        String encodedPassword;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            encodedPassword = Base64.getEncoder().encodeToString(byteArray);
+        } else {
+            encodedPassword = android.util.Base64.encodeToString(byteArray, android.util.Base64.NO_WRAP);
+        }
 
-            Call<MpesaResponse> call = mpesaApi.stkPush(AUTHORIZATION_TOKEN, request);
+        STKPush stkPush = new STKPush(
+                BUSINESS_SHORT_CODE,
+                encodedPassword,
+                timestamp,
+                "CustomerPayBillOnline",
+                Integer.parseInt(amount),
+                Utils.sanitizePhoneNumber(phoneNumber),
+                BUSINESS_SHORT_CODE,
+                Utils.sanitizePhoneNumber(phoneNumber),
+                CALLBACK_URL,
+                "Luxury Network company powered by Starlink",
+                "Payment of X"
+        );
 
-            call.enqueue(new Callback<MpesaResponse>() {
-                @Override
-                public void onResponse(Call<MpesaResponse> call, Response<MpesaResponse> response) {
-                    if (response.isSuccessful() && response.body() != null) {
-                        Toast.makeText(PaymentActivity.this, response.body().getCustomerMessage(), Toast.LENGTH_SHORT).show();
+        mApiClient.setGetAccessToken(false);
+
+        mApiClient.mpesaService().sendPush(stkPush).enqueue(new Callback<STKPush>() {
+            @Override
+            public void onResponse(@NonNull Call<STKPush> call, @NonNull Response<STKPush> response) {
+                mProgressDialog.dismiss();
+                try {
+                    if (response.isSuccessful()) {
+                        Log.d(TAG, "Payment request submitted successfully. " + response.body());
+                        Toast.makeText(PaymentActivity.this, "Payment request sent successfully", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(PaymentActivity.this, "Payment failed: " + response.message(), Toast.LENGTH_SHORT).show();
-                        try {
-                            Log.e("PaymentActivity", "Error: " + (response.errorBody() != null ? response.errorBody().string() : "Unknown error"));
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
+                        Log.e(TAG, "Payment request failed. Response: " + response.errorBody().string());
+                        Toast.makeText(PaymentActivity.this, "Payment request failed", Toast.LENGTH_SHORT).show();
                     }
+                } catch (Exception e) {
+                    Log.e(TAG, "Error processing payment response", e);
+                    Toast.makeText(PaymentActivity.this, "Error processing payment", Toast.LENGTH_SHORT).show();
                 }
+            }
 
-                @Override
-                public void onFailure(Call<MpesaResponse> call, Throwable t) {
-                    Toast.makeText(PaymentActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                    Log.e("PaymentActivity", "Failure: " + t.getMessage());
-                }
-            });
-        } catch (Exception e) {
-            Log.e("PaymentActivity", "Error making payment", e);
-            throw e;
-        }
-    }
-
-    // Helper method to format phone number
-    private String formatPhoneNumber(String phoneNumber) {
-        if (phoneNumber.startsWith("0")) {
-            return "254" + phoneNumber.substring(1);
-        }
-        return phoneNumber;
-    }
-
-    // Method to generate password
-    private String generatePassword(String businessShortCode, String passkey, String timestamp) {
-        String data = businessShortCode + passkey + timestamp;
-        return Base64.encodeToString(data.getBytes(), Base64.NO_WRAP);
+            @Override
+            public void onFailure(@NonNull Call<STKPush> call, @NonNull Throwable t) {
+                mProgressDialog.dismiss();
+                Log.e(TAG, "Payment request failed", t);
+                Toast.makeText(PaymentActivity.this, "Payment request failed", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

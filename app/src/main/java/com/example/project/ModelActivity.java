@@ -15,6 +15,8 @@ import org.tensorflow.lite.DataType;
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 
 public class ModelActivity extends AppCompatActivity {
     private EditText editTextAge;
@@ -91,7 +93,14 @@ public class ModelActivity extends AppCompatActivity {
 
             // Creates inputs for reference.
             TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 10}, DataType.FLOAT32);
-            inputFeature0.loadArray(inputValues);
+
+            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * inputValues.length);
+            byteBuffer.order(ByteOrder.nativeOrder());
+            for (float inputValue : inputValues) {
+                byteBuffer.putFloat(inputValue);
+            }
+
+            inputFeature0.loadBuffer(byteBuffer);
 
             // Runs model inference and gets result.
             Model.Outputs outputs = model.process(inputFeature0);
@@ -105,6 +114,9 @@ public class ModelActivity extends AppCompatActivity {
             model.close();
         } catch (IOException e) {
             Toast.makeText(this, "Model inference failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "Error during model processing: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            e.printStackTrace();
         }
     }
 
